@@ -1,6 +1,14 @@
 # Changelog
 
-# latest
+# 0.3.2
+
+- Added battletag parsing
+
+# 0.3.1
+
+- Fixed timestamp parsing
+
+# 0.3.0
 
 - Automated protocol port
 

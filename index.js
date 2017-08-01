@@ -7,6 +7,9 @@ const protocol29406 = exports.protocol =  require('./lib/protocol29406');
 
 const version = exports.version = require('./package.json').version;
 
+const BattleTagDecoder = require('./lib/decoders').BattleTagDecoder;
+const battleTagDecoder = new BattleTagDecoder();
+
 // parsable parts
 const HEADER            = exports.HEADER            = 'header';
 const DETAILS           = exports.DETAILS           = 'replay.details';
@@ -15,6 +18,7 @@ const GAME_EVENTS       = exports.GAME_EVENTS       = 'replay.game.events';
 const MESSAGE_EVENTS    = exports.MESSAGE_EVENTS    = 'replay.message.events';
 const TRACKER_EVENTS    = exports.TRACKER_EVENTS    = 'replay.tracker.events';
 const ATTRIBUTES_EVENTS = exports.ATTRIBUTES_EVENTS = 'replay.attributes.events';
+const BATTLE_TAGS       = exports.BATTLE_TAGS       = 'replay.server.battlelobby';
 
 const decoderMap = {
   [HEADER]:             'decodeReplayHeader',
@@ -104,7 +108,14 @@ exports.get = function (archiveFile, archive) {
     data = archive.data[archiveFile];
   } else {
     if (archive.protocol) {
-      if ([DETAILS, INITDATA, ATTRIBUTES_EVENTS].indexOf(archiveFile) > -1) {
+      if (archiveFile == BATTLE_TAGS) {
+        let details = archive.protocol.decodeReplayDetails(archive.readFile(DETAILS));
+        let players = details.m_playerList.reduce((arr, obj) => {
+          arr.push(obj.m_name.toString());
+          return arr;
+        }, []);
+        data = battleTagDecoder.decode(archive.readFile(archiveFile), players);
+      } else if ([DETAILS, INITDATA, ATTRIBUTES_EVENTS].indexOf(archiveFile) > -1) {
         data = archive.data[archiveFile] =
           parseStrings(archive.protocol[decoderMap[archiveFile]](
             archive.readFile(archiveFile)

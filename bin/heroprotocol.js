@@ -76,7 +76,7 @@ class EventLogger {
 }
 
 const yargs = require('yargs')
-                .usage('usage: heroprotocol.js replayFile [--help] [--header] [--details] [--initdata] [--gameevents] [--messageevents] [--trackerevents] [--attributeevents] [--stats]')
+                .usage('usage: heroprotocol.js replayFile [--help] [--header] [--details] [--initdata] [--gameevents] [--messageevents] [--trackerevents] [--attributeevents] [--stats] [--battletags]')
                 .demand(1)
                 .option('h', { alias: 'help', type: 'boolean', desc: 'show this help' })
                 .option('H', { alias: 'header', type: 'boolean', desc: 'print protocol header' })
@@ -87,6 +87,7 @@ const yargs = require('yargs')
                 .option('t', { alias: 'trackerevents', type: 'boolean', desc: 'print tracker events' })
                 .option('a', { alias: 'attributeevents', type: 'boolean', desc: 'print attribute events' })
                 .option('s', { alias: 'stats', type: 'boolean', desc: 'print stats' })
+                .option('b', { alias: 'battletags', type: 'boolean', desc: 'print battletags' })
                 .option('json', { type: 'boolean', desc: 'prints in JSON format' });
 const args = yargs.argv;
 
@@ -141,4 +142,8 @@ if (args.attributeevents) {
 
 if (args.stats) {
   logger.logStats();
+}
+
+if (args.battletags) {
+  logger.log(archive.get(heroprotocol.BATTLE_TAGS));
 }
