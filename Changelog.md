@@ -2,7 +2,7 @@
 
 # 0.3.2
 
-- Added battletag parsing
+- Added battle tag parsing
 
 # 0.3.1
 
