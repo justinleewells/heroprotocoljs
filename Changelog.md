@@ -3,6 +3,7 @@
 # 0.3.2
 
 - Added battle tag parsing
+- Added party parsing
 
 # 0.3.1
 
